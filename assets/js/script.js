@@ -24,14 +24,32 @@ function createSquareGrid(range, size) {
 
 createSquareGrid(NBCASE, GRIDSIZE);
 
-// fonction qui génère un entier aléatoire
+
+let items = document.getElementsByClassName('item');
+// création d'un tableau avec des nb aléatoire unique
+for (var a = [], i = 0; i < items.length; ++i) a[i] = i;
+
+// http://stackoverflow.com/questions/962802#962890
+function shuffle(array) {
+    for (var a = [], i = 0; i < items.length; ++i) a[i] = i;
+    var tmp, current, top = array.length;
+    if (top) while (--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+    }
+    return array;
+}
+
+a = shuffle(a);
+
 // fonction qui place les mines. (nb nombre de mines)
 function placeMine(nb) {
-    let items = document.getElementsByClassName('item');
-    let randomNumber;
+    let alea;
     for (let i = 0; i < nb; i++) {
-        randomNumber = getRandomInt(items.length)
-        items[randomNumber].className = 'item bomb';
+        alea = a[i];
+        items[alea].className = 'item bomb';
     }
 }
 
@@ -41,7 +59,7 @@ let arrayCase = grid.children;
 
 // add event listener click on each "case" nice alert on miss
 for (const ele of arrayCase) {
-    ele.addEventListener("click", function() {
+    ele.addEventListener("click", function () {
         if (ele.className == 'item bomb') {
             alert("SURPRISE MOTHER FUCkER!!");
         } else {
