@@ -61,7 +61,7 @@ let arrayCase = grid.children;
 for (const ele of arrayCase) {
     ele.addEventListener("click", function () {
         if (ele.className == 'item bomb') {
-            alert("SURPRISE MOTHER FUCkER!!");
+            alert("oups you died !");
         } else {
             let coordonnée = ele.id
             console.log(coordonnée);
