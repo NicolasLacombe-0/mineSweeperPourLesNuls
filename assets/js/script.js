@@ -16,7 +16,7 @@ function createSquareGrid(range, size) {
             let div = document.createElement("div");
             div.className = "item";
             //placement des divs avec leur coordonnés en id
-            div.id = `x=${i} y=${j}`;
+            div.id = `${i} ${j}`;
             grid.append(div);
         }
     };
@@ -24,14 +24,12 @@ function createSquareGrid(range, size) {
 
 createSquareGrid(NBCASE, GRIDSIZE);
 
-
 let items = document.getElementsByClassName('item');
 // création d'un tableau avec des nb aléatoire unique
 for (var a = [], i = 0; i < items.length; ++i) a[i] = i;
 
 // http://stackoverflow.com/questions/962802#962890
 function shuffle(array) {
-    for (var a = [], i = 0; i < items.length; ++i) a[i] = i;
     var tmp, current, top = array.length;
     if (top) while (--top) {
         current = Math.floor(Math.random() * (top + 1));
@@ -63,8 +61,33 @@ for (const ele of arrayCase) {
         if (ele.className == 'item bomb') {
             alert("oups you died !");
         } else {
-            let coordonnée = ele.id
-            console.log(coordonnée);
+            let nbMinesAdjacentes = compteNbMineAdjacentes(ele);
+            ele.innerHTML = `<p>${nbMinesAdjacentes}</p>`;
+            let classe = `nb${nbMinesAdjacentes}`;
+            ele.classList.add(classe);
         };
     })
+}
+
+// fonction pour compter les mines adjacentes
+function compteNbMineAdjacentes(ele) {
+    let nbMinesAdjacentes = 0;
+    let coordonne = ele.id;
+    let x = parseInt(coordonne[0]);
+    let y = parseInt(coordonne[2]);
+    console.log(x, y);
+    if (x >= 1 && y >= 1) {
+        let id = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1], [x - 1, y - 1], [x + 1, y + 1], [x - 1, y + 1], [x + 1, y - 1]];
+        let caseAdjacentes = [];
+        id.forEach(el => {
+            let caseAdjacente = document.getElementById(`${el[0]} ${el[1]}`);
+            caseAdjacentes.push(caseAdjacente);
+        });
+        caseAdjacentes.forEach(el => {
+            if (el.className == 'item bomb') {
+                nbMinesAdjacentes += 1;
+            }
+        })
+        return nbMinesAdjacentes;
+    }
 }
